@@ -1,22 +1,22 @@
 import React from 'react';
 // 引入css进行页面美化
-import styles from './CustomerPage.css'
+import styles from './ProductPage.css'
 // 导入组件
 import {Modal,Button, Table,message} from 'antd'
 import axios from '../utils/axios'
-import CustomerForm from './CustomerForm'
+import ProductForm from './ProductFrom'
 
 // 组件类必须要继承React.Component，是一个模块，顾客管理子功能
-class CustomerPage extends React.Component {
+class ProductPage extends React.Component {
   // 局部状态state
   constructor(){
     super();
     this.state = {
       ids:[], // 批量删除的时候保存的id
-      list:[],
+      list:[],    
       loading:false,
       visible:false,
-      customer:{}
+      product:{}
     }
   }
   // 在生命周期钩子函数中调用重载数据
@@ -27,7 +27,7 @@ class CustomerPage extends React.Component {
   // 重载数据
   reloadData(){
     this.setState({loading:true});
-    axios.get("/customer/findAll")
+    axios.get("/product/findAll")
     .then((result)=>{
       // 将查询数据更新到state中
       this.setState({list:result.data})
@@ -40,10 +40,10 @@ class CustomerPage extends React.Component {
   // 批量删除
   handleBatchDelete(){
     Modal.confirm({
-      title: '确定删除这些记录吗?',
+      title: '确定删除这些商品吗?',
       content: '删除后数据将无法恢复',
       onOk:() => {
-        axios.post("/customer/batchDelete",{ids:this.state.ids})
+        axios.post("/product/batchDelete ",{ids:this.state.ids})
         .then((result)=>{
           //批量删除后重载数据
           message.success(result.statusText)
@@ -56,15 +56,11 @@ class CustomerPage extends React.Component {
   // 单个删除
   handleDelete(id){
     Modal.confirm({
-      title: '确定删除这条记录吗?',
+      title: '确定删除这件商品吗?',
       content: '删除后数据将无法恢复',
       onOk:() => {
         // 删除操作
-        axios.get("/customer/deleteById",{
-          params:{
-            id:id
-          }
-        })
+        axios.get(`/product/deleteById?id=${id}` )
         .then((result)=>{
           // 删除成功后提醒消息，并且重载数据
           message.success(result.statusText);
@@ -86,7 +82,7 @@ class CustomerPage extends React.Component {
         return;
       }
       // 表单校验完成后与后台通信进行保存
-      axios.post("/customer/saveOrUpdate",values)
+      axios.post("/product/saveOrUpdate",values)
       .then((result)=>{
         message.success(result.statusText)
         // 重置表单
@@ -106,12 +102,12 @@ class CustomerPage extends React.Component {
   // 去添加
   toAdd(){
     // 将默认值置空,模态框打开
-    this.setState({customer:{},visible:true})
+    this.setState({product:{},visible:true})
   }
   // 去更新
   toEdit(record){
     // 更前先先把要更新的数据设置到state中
-    this.setState({customer:record})
+    this.setState({product:record})
     // 将record值绑定表单中
     this.setState({visible:true})
   }
@@ -120,17 +116,25 @@ class CustomerPage extends React.Component {
   render(){
     // 变量定义
     let columns = [{
-      title:'姓名',
+      title:'商品名称',
       align:"center",
-      dataIndex:'realname'
+      dataIndex:'name'
     },{
-      title:'手机号',
+      title:'商品描述',
       align:"center",
-      dataIndex:'telephone'
+      dataIndex:'description'
+    },{
+      title:'价格',
+      align:"center",
+      dataIndex:'price'
     },{
       title:'状态',
       align:"center",
       dataIndex:'status'
+    },{
+      title:'商品图片',
+      align:"center",
+      dataIndex:'photo'
     },{
       title:'操作',
       width:120,
@@ -160,7 +164,7 @@ class CustomerPage extends React.Component {
     // 返回结果 jsx(js + xml)
     return (
       <div className={styles.customer}>
-        <div className={styles.title}>顾客管理</div>
+        <div className={styles.title}>商品管理</div>
         <div className={styles.btns}>
           <Button onClick={this.toAdd.bind(this)}>添加</Button> &nbsp;
           <Button onClick={this.handleBatchDelete.bind(this)}>批量删除</Button> &nbsp;
@@ -176,8 +180,8 @@ class CustomerPage extends React.Component {
           columns={columns}
           dataSource={this.state.list}/>
 
-        <CustomerForm
-          initData={this.state.customer}
+       <ProductForm
+          initData={this.state.product}
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.visible}
           onCancel={this.handleCancel}
@@ -187,4 +191,4 @@ class CustomerPage extends React.Component {
   }
 }
 
-export default CustomerPage;
+export default ProductPage;
