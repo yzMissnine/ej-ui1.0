@@ -6,6 +6,10 @@ import ProductPage from './routes/ProductPage';
 import AddressPage from './routes/AddressPage';
 import CategoryPage from './routes/CategoryPage';
 import CommentPage from './routes/CommentPage';
+import OrderPage from './routes/OrderPage';
+import WaiterPage from './routes/WaiterPage';
+
+
 import styles from './router.css'
 
 function RouterConfig({ history }) {
@@ -20,7 +24,9 @@ function RouterConfig({ history }) {
               <li className={styles["nav-list-item"]}><Link to="/product">产品管理</Link></li>
               <li className={styles["nav-list-item"]}><Link to="/address">地址管理</Link></li>
               <li className={styles["nav-list-item"]}><Link to="/category">状态管理</Link></li>
+              <li className={styles["nav-list-item"]}><Link to="/waiter">服务员管理</Link></li>
               <li className={styles["nav-list-item"]}><Link to="/comment">评论管理</Link></li>
+              <li className={styles["nav-list-item"]}><Link to="/order">订单管理</Link></li>
             </ul>
 </div>
  <div className={styles["right-content"]}>
@@ -30,7 +36,9 @@ function RouterConfig({ history }) {
         <Route path="/product" exact component={ProductPage} />
         <Route path="/address" exact component={AddressPage} />
         <Route path="/category" exact component={CategoryPage} />
+        <Route path="/waiter" exact component={WaiterPage} />
         <Route path="/comment" exact component={CommentPage} />
+        <Route path="/order" exact component={OrderPage} />
       </Switch>
      </div>
 </div>
