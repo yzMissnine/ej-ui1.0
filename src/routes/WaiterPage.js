@@ -4,6 +4,7 @@ import React from 'react';
 import styles from './WaiterPage.css';
 
 import {Modal,Button,Table,message} from 'antd'
+
 import axios from '../utils/axios'
 import WaiterForm from './WaiterForm'
 
@@ -17,6 +18,7 @@ class WaiterPage extends React.Component {
       loading: true,
       list: [],
       visible: false,
+
       address:{}
     } 
   }
@@ -71,6 +73,7 @@ handleDelete(id){
 }
 
 
+
   handleCancel = () => {
     this.setState({ visible: false });
   };
@@ -110,8 +113,6 @@ handleDelete(id){
   }
 
   render() {
-    
-    
     let columns = [{
       title: "工号",
       dataIndex: "id"
@@ -132,15 +133,18 @@ handleDelete(id){
       dataIndex: "status"
     }, {
       title: "操作",
+
       render: (table, record) => {
         return (
           <div>
           <Button type='link' size="small" onClick={this.handleDelete.bind(this,record.id)}>删除</Button>
           <Button type='link' size="small" onClick={this.toEdit.bind(this,record)}>修改</Button>
         </div>
+
         )
       }
     }]
+
 
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
@@ -161,6 +165,7 @@ handleDelete(id){
         <div className={styles.title}>服务员管理</div>
         <div className={styles.btns}>
           <Button  onClick={this.toAdd.bind(this)}>添加人员</Button> &nbsp;
+
           &nbsp;
         
           {/* &nbsp;<Button type="link" onClick={() => { window.location.href = "/" }}>返回首页</Button> */}

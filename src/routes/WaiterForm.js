@@ -1,4 +1,7 @@
+
 import React from 'react';
+
+
 import { Form, Modal, Input, } from 'antd'
 
 class WaiterForm extends React.Component {
@@ -40,7 +43,7 @@ class WaiterForm extends React.Component {
                         })(<Input />)}
                     </Form.Item>
                     <Form.Item label="密码">
-                        {getFieldDecorator('password', {
+                        {getFieldDecorator('password', { 
                             rules: [{ required: true, message: '请输入密码!' }],
                         })(<Input.Password />)}
                     </Form.Item>

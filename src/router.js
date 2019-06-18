@@ -8,7 +8,10 @@ import CategoryPage from './routes/CategoryPage';
 import CommentPage from './routes/CommentPage';
 import OrderPage from './routes/OrderPage';
 import WaiterPage from './routes/WaiterPage';
+
 import CustomerDetails from './routes/CustomerDetails'
+
+
 
 import styles from './router.css'
 
@@ -39,7 +42,9 @@ function RouterConfig({ history }) {
         <Route path="/waiter" exact component={WaiterPage} />
         <Route path="/comment" exact component={CommentPage} />
         <Route path="/order" exact component={OrderPage} />
+
         <Route path="/customerDetails" exact component={CustomerDetails} />
+
       </Switch>
      </div>
 </div>
