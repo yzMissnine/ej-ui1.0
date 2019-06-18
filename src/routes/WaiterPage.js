@@ -2,7 +2,8 @@
 
 import React from 'react';
 import styles from './WaiterPage.css';
-import { Button, Table,Popconfirm,message, } from 'antd';
+
+import {Modal,Button,Table,message} from 'antd'
 import axios from '../utils/axios'
 import WaiterForm from './WaiterForm'
 
@@ -16,54 +17,59 @@ class WaiterPage extends React.Component {
       loading: true,
       list: [],
       visible: false,
- 
+      address:{}
     } 
   }
-  UNSAFE_componentWillMount() {
-    this.handlerLoad();
-  }
-  //   componentDidMount() {
-  //     // 查询数据，进行数据绑定
-
-  //     // this.reloadDate();
-  //   }
-
-  //封装查询用户
-  handlerLoad() {
-    axios.get("/waiter/findAll")
-      .then((result) => {
-        //console.log('查询到的数据为：',result.data);
-        //将查询到的数据设置到state中
-        this.setState({
-          list: result.data,
-          loading: false
-        })
-      })
-  }
-  //删除用户
-  handleDelete(id) {
-    let obj = { 'id': id }
-    axios.post("/waiter/deleteById", obj)
-      .then((result) => {
-        if (200 === result.status) {
-          message.success(result.statusText)
-          this.handlerLoad();
+  componentDidMount(){
+    this.reloadData();
+}
+reloadData(){
+    this.setState({loading:true});
+    axios.get("/address/findAll")
+    .then((result)=>{
+        this.setState({list:result.data})
+    })
+    .finally(()=>{
+        this.setState({loading:false});
+    })
+}
+  
+   // 批量删除
+   handleBatchDelete(){
+    Modal.confirm({
+        title: '确定删除这些记录吗?',
+        content: '删除后数据将无法恢复',
+        onOk:() => {
+            axios.post("/waiter/batchDelete",{ids:this.state.ids})
+            .then((result)=>{
+            //批量删除后重载数据
+            message.success(result.statusText)
+            this.reloadData(); 
+            })
         }
-      })
-  }
-  batchDelete = () => {
-    axios.post("/waiter/batchDelete", { ids: this.state.selectedRowKeys })
-      .then((result) => {
-        if (200 === result.status) {
-          message.success(result.statusText)
-          this.handlerLoad();
+    })
+}
+// 单个删除
+handleDelete(id){
+    Modal.confirm({
+        title: '确定删除这条记录吗?',
+        content: '删除后数据将无法恢复',
+        onOk:() => {
+          // 删除操作
+          axios.get("/waiter/deleteById",{
+            params:{
+              id:id
+            }
+          })
+          .then((result)=>{
+            // 删除成功后提醒消息，并且重载数据
+            message.success(result.statusText);
+            this.reloadData();
+            })
         }
-      })
-  }
-  onSelectChange = selectedRowKeys => {
-    this.setState({ selectedRowKeys });
+    });
+}
 
-  };
 
   handleCancel = () => {
     this.setState({ visible: false });
@@ -104,12 +110,8 @@ class WaiterPage extends React.Component {
   }
 
   render() {
-    const { selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
-    let text = "是否删除"
+    
+    
     let columns = [{
       title: "工号",
       dataIndex: "id"
@@ -130,27 +132,35 @@ class WaiterPage extends React.Component {
       dataIndex: "status"
     }, {
       title: "操作",
-      render: (table, Record) => {
+      render: (table, record) => {
         return (
           <div>
-            <Popconfirm placement="top" title={text}
-              onConfirm={this.handleDelete.bind(this, Record.id)} okText="是" cancelText="否">
-              <Button size="small" type="link">删除</Button>
-            </Popconfirm>
-
-            <Button size="small"  type="link" onClick={this.toEdit.bind(this, Record)}>修改</Button>
-          </div>
+          <Button type='link' size="small" onClick={this.handleDelete.bind(this,record.id)}>删除</Button>
+          <Button type='link' size="small" onClick={this.toEdit.bind(this,record)}>修改</Button>
+        </div>
         )
       }
     }]
 
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        // 当用户操作复选按钮的时候，将值获取到并且保存到state中
+        this.setState({
+          ids:selectedRowKeys
+        })
+      },
+      getCheckboxProps: record => ({
+        disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        name: record.name,
+      }),
+    };  
+
     //返回结果
     return (
-      <div className="waiter">
-        <div className={styles.header}>服务员管理</div>
-
-        <div className={styles.buttonsbmit}>
-          &nbsp;<Button  onClick={this.toAdd.bind(this)}>添加人员</Button>
+      <div className={styles.address}>
+        <div className={styles.title}>服务员管理</div>
+        <div className={styles.btns}>
+          <Button  onClick={this.toAdd.bind(this)}>添加人员</Button> &nbsp;
           &nbsp;
         
           {/* &nbsp;<Button type="link" onClick={() => { window.location.href = "/" }}>返回首页</Button> */}

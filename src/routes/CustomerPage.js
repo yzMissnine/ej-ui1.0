@@ -6,6 +6,7 @@ import {Modal,Button, Table,message} from 'antd'
 import axios from '../utils/axios'
 import CustomerForm from './CustomerForm'
 
+
 // 组件类必须要继承React.Component，是一个模块，顾客管理子功能
 class CustomerPage extends React.Component {
   // 局部状态state
@@ -36,7 +37,6 @@ class CustomerPage extends React.Component {
       this.setState({loading:false});
     })
   }
-
   // 批量删除
   handleBatchDelete(){
     Modal.confirm({
@@ -73,7 +73,6 @@ class CustomerPage extends React.Component {
       }
     });
   }
-
   // 取消按钮的事件处理函数
   handleCancel = () => {
     this.setState({ visible: false });
@@ -98,7 +97,6 @@ class CustomerPage extends React.Component {
       
     });
   };
-
   // 将子组件的引用在父组件中进行保存，方便后期调用
   saveFormRef = formRef => {
     this.formRef = formRef;
@@ -114,6 +112,14 @@ class CustomerPage extends React.Component {
     this.setState({customer:record})
     // 将record值绑定表单中
     this.setState({visible:true})
+  }
+  toDetails(record){
+    console.log(record);
+    //跳转 react-router
+    this.props.history.push({
+      pathname:"/customerDetails",
+      payload:record
+    })
   }
 
   // 组件类务必要重写的方法，表示页面渲染
@@ -133,13 +139,15 @@ class CustomerPage extends React.Component {
       dataIndex:'status'
     },{
       title:'操作',
-      width:120,
+      width:170,
       align:"center",
       render:(text,record)=>{
         return (
           <div>
             <Button type='link' size="small" onClick={this.handleDelete.bind(this,record.id)}>删除</Button>
             <Button type='link' size="small" onClick={this.toEdit.bind(this,record)}>修改</Button>
+            <Button type='link' size="small" onClick={this.toDetails.bind(this,record)}>详情</Button>
+            
           </div>
         )
       }
@@ -166,7 +174,6 @@ class CustomerPage extends React.Component {
           <Button onClick={this.handleBatchDelete.bind(this)}>批量删除</Button> &nbsp;
           <Button type="link">导出</Button>
         </div>
-
         <Table 
           bordered
           rowKey="id"
