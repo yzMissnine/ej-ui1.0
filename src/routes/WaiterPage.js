@@ -115,24 +115,35 @@ handleDelete(id){
   render() {
     let columns = [{
       title: "工号",
-      dataIndex: "id"
+      dataIndex: "id",
+      align:"center",
     }, {
       title: "电话",
-      dataIndex: "telephone"
+      dataIndex: "telephone",
+      align:"center",
+      
+
     }, {
       title: "密码",
-      dataIndex: "password"
+      dataIndex: "password",
+      align:"center",
+
     }, {
       title: "姓名",
-      dataIndex: "realname"
+      align:"center",
+      dataIndex: "realname",
     }, {
       title: "卡号",
-      dataIndex: "idcard"
+      align:"center",
+      dataIndex: "idcard",
     }, {
       title: "状态",
-      dataIndex: "status"
+      align:"center",
+      dataIndex: "status",
     }, {
       title: "操作",
+      align:"center",
+
 
       render: (table, record) => {
         return (

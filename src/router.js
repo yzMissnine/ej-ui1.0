@@ -9,11 +9,7 @@ import CommentPage from './routes/CommentPage';
 import OrderPage from './routes/OrderPage';
 import WaiterPage from './routes/WaiterPage';
 import MainPage from './routes/MainPage';
-
 import CustomerDetails from './routes/CustomerDetails'
-
-
-
 
 function RouterConfig({ history }) {
   return (
@@ -37,8 +33,5 @@ function RouterConfig({ history }) {
 </Router>
   ); 
 }
-
-
-
 
 export default RouterConfig;
