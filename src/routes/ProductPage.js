@@ -143,14 +143,19 @@ class ProductPage extends React.Component {
     },{
       title:'商品图片',
       align:"center",
-      dataIndex:'photo'
+      dataIndex:'photo',
+      render(text){
+        return (
+          <img width={40} height={40} src={"http://134.175.154.93:8888/group1/"+text}/>
+        )
+      }
     },{
       title:'操作',
       width:170,
       align:"center",
       render:(text,record)=>{
         return (
-          <div>
+        <div>
             <Button type='link' size="small" onClick={this.handleDelete.bind(this,record.id)}>删除</Button>
             <Button type='link' size="small" onClick={this.toEdit.bind(this,record)}>修改</Button>
             <Button type='link' size="small" onClick={this.toDetails.bind(this,record)}>详情</Button>
